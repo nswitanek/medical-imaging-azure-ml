@@ -1,0 +1,21 @@
+$schema: https://azuremlschemas.azureedge.net/latest/model.schema.json
+# Qwen3-0.6B text-tower weights, registered as a v2 custom_model asset so governed compute
+# (which can't reach huggingface.co) can mount them offline into the Stage-2 / evaluate jobs
+# and the online deployment. See scripts/qwen-text-tower.md for the end-to-end wiring.
+#
+# Populate ./qwen3-0.6b first:
+#   uv run --extra text python scripts/download_qwen.py --out ./qwen3-0.6b
+# Then register (path can be overridden at create time with --set path=...):
+#   az ml model create -f azureml/model-assets/qwen3-0.6b.yml
+name: qwen3-0_6b-text-tower
+version: "1"
+type: custom_model
+path: ../../qwen3-0.6b
+description: >
+  Qwen3-0.6B base weights + tokenizer for the CT–report text tower. Mounted read-only and
+  referenced via the CTREPORT_QWEN_DIR environment variable (with HF_HUB_OFFLINE=1) so the
+  QwenTextEncoder/QwenTokenizer load without any network egress.
+tags:
+  source: huggingface:Qwen/Qwen3-0.6B
+  role: text-tower-backbone
+  offline: "true"

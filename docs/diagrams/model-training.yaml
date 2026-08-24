@@ -1,0 +1,88 @@
+# Model-training pipeline: learning from de-identified DICOM images + metadata + text.
+# Rendered by tools/render_diagrams.py into model-training.conceptual/azure .graphviz.png and .drawio.
+# Edit this file, then run:
+#   python tools/render_diagrams.py docs/diagrams/model-training.yaml
+title: Model Training — DICOM Images + Metadata + Text
+
+zones:
+  - {id: data,     label: "De-identified data (Gold)"}
+  - {id: assemble, label: "Dataset assembly"}
+  - {id: train,    label: "Training & tuning"}
+  - {id: track,    label: "Tracking & registry"}
+  - {id: gate,     label: "Evaluation gate"}
+  - {id: serve,    label: "Deploy / handoff"}
+
+nodes:
+  - id: images
+    zone: data
+    conceptual: "De-ID image pixels\n(DICOM)"
+    azure: "Azure Data Lake\nStorage"
+    icon: azure.storage.DataLakeStorage
+  - id: meta
+    zone: data
+    conceptual: "Curated metadata\n& features"
+    azure: "Fabric / Snowflake /\nDatabricks"
+    icon: saas.analytics.Snowflake
+  - id: text
+    zone: data
+    conceptual: "De-ID reports,\nnotes & labels"
+    azure: "Azure Data Lake\nStorage"
+    icon: azure.storage.DataLakeStorage
+
+  - id: cohort
+    zone: assemble
+    conceptual: "Cohort & split builder\n(patient-level)"
+    azure: "Azure ML\ndata & labeling"
+    icon: azure.ml.MachineLearningServiceWorkspaces
+  - id: features
+    zone: assemble
+    conceptual: "Image/text/feature\njoin + versioned set"
+    azure: "Lakehouse\nfeature views"
+    icon: saas.analytics.Snowflake
+
+  - id: foundation
+    zone: train
+    conceptual: "Foundation models\n(embeddings/backbones)"
+    azure: "Foundry catalog\n(MedImageInsight...)"
+    icon: azure.ml.AzureOpenAI
+  - id: job
+    zone: train
+    conceptual: "Training job\n(fine-tune / adapter /\nfrom-scratch)"
+    azure: "Azure ML jobs\n(GPU compute)"
+    icon: azure.ml.MachineLearningServiceWorkspaces
+
+  - id: mlflow
+    zone: track
+    conceptual: "Experiment tracking\n(metrics, params)"
+    azure: "Azure ML /\nMLflow"
+    icon: azure.devops.ApplicationInsights
+  - id: registry
+    zone: track
+    conceptual: "Model registry\n(version + lineage)"
+    azure: "Azure ML\nmodel registry"
+    icon: azure.general.Versions
+
+  - id: eval
+    zone: gate
+    conceptual: "Evaluation &\nsafety gate"
+    azure: "Foundry evaluations\n+ Content Safety"
+    icon: azure.ml.CognitiveServices
+
+  - id: deploy
+    zone: serve
+    conceptual: "Approved model\n→ hosting"
+    azure: "Managed endpoints /\nAKS / Container Apps"
+    icon: azure.ml.MachineLearningServiceWorkspaces
+
+edges:
+  - [images, cohort]
+  - [meta, cohort]
+  - [text, cohort]
+  - [cohort, features]
+  - [features, job]
+  - [foundation, job]
+  - [job, mlflow]
+  - [job, registry]
+  - [registry, eval]
+  - [eval, deploy]
+  - [eval, job, "fail: iterate", dashed]

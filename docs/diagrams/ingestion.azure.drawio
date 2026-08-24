@@ -1,0 +1,30 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Azure" id="azure">
+    <mxGraphModel dx="900" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="540" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="z_source" value="HOSPITAL SOURCES" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="20" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_gateway" value="INGEST GATEWAY" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="240" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_service" value="HEALTH DATA SERVICES" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="460" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_process" value="PROCESS &amp; DE-ID" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="680" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_land" value="LANDING" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="modality" value="Modality / PACS&#10;(DICOM, HL7v2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="gw" value="Container Apps /&#10;DICOM gateway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="260" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="dicom" value="AHDS&#10;DICOM service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"><mxGeometry x="480" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="feed" value="DICOM change feed /&#10;Event Grid" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"><mxGeometry x="480" y="170" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="job" value="Azure Functions /&#10;Container job" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="700" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="phi" value="AI Services&#10;(de-ID)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="700" y="170" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="meta" value="Fabric / Snowflake /&#10;Databricks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="920" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="pixels" value="Azure Data Lake&#10;Storage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="920" y="170" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="e0" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="modality" target="gw"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e1" value="STOW" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="gw" target="dicom"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="dicom" target="feed"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="feed" target="job"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="job" target="phi"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="phi" target="meta"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="phi" target="pixels"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

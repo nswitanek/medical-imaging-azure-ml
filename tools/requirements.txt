@@ -1,0 +1,8 @@
+# Dependencies for scripts/render_diagrams.py
+# Also requires the Graphviz `dot` binary on PATH:
+#   Windows: winget install Graphviz.Graphviz  (add "C:\Program Files\Graphviz\bin" to PATH)
+#   macOS:   brew install graphviz
+#   Linux:   sudo apt-get install graphviz
+diagrams>=0.23
+graphviz>=0.20
+PyYAML>=6.0

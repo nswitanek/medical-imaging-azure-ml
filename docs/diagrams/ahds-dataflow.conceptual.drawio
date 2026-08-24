@@ -1,0 +1,28 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Conceptual" id="conceptual">
+    <mxGraphModel dx="900" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="540" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="z_source" value="SOURCES" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="20" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_ahds" value="AZURE HEALTH DATA SERVICES" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="240" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_process" value="DE-ID &amp; FEATURE PIPELINE" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="460" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_land" value="LAKEHOUSE" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="680" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="modality" value="Modalities" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="ehr" value="EHR / HL7v2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="170" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="dicom" value="DICOM service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="260" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="fhir" value="FHIR service&#10;(ImagingStudy)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="260" y="170" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="convert" value="$convert-data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="260" y="270" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="pipeline" value="De-ID / feature&#10;pipeline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"><mxGeometry x="480" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="lake" value="Lakehouse" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="700" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="e0" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="modality" target="dicom"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e1" value="change feed" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="dicom" target="pipeline"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" value="DICOMcast" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#b85450;fontSize=9;" edge="1" parent="1" source="dicom" target="fhir"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="ehr" target="convert"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="convert" target="fhir"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e5" value="de-ID $export" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="fhir" target="pipeline"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="pipeline" target="lake"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

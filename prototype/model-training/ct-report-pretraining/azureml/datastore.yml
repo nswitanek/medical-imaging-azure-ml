@@ -1,0 +1,25 @@
+# Credential-less datastore for the CT-report Gold zone.
+#
+# Points Azure ML at a blob container using the workspace / compute MANAGED IDENTITY instead of
+# stored account keys or SAS tokens. This is mandatory when the storage account has
+# allowSharedKeyAccess=false (see infra/modules/storage.bicep): a bare blob URL would never
+# present an identity and the job would fail with ScriptExecution.StreamAccess.Authentication.
+#
+# Reference data in jobs as:  azureml://datastores/ct_report_gold/paths/<path>
+#
+# Prereqs (granted by infra/main.bicep for the workspace storage account; do the same on any
+# OTHER account you point this at):
+#   * compute-cluster MSI  -> Storage Blob Data Reader (or Contributor) on the account
+#   * workspace MSI        -> Storage Blob Data Contributor on the account
+#
+# Create/update with:
+#   az ml datastore create -f azureml/datastore.yml \
+#     --set account_name=<storage> --set container_name=<container>
+
+$schema: https://azuremlschemas.azureedge.net/latest/azureBlob.schema.json
+name: ct_report_gold
+type: azure_blob
+description: Credential-less (identity-based) datastore for de-identified CT + report Gold data.
+account_name: REPLACE_STORAGE_ACCOUNT
+container_name: ct-report-gold
+# No credentials block on purpose -> Azure ML uses the workspace/compute managed identity.

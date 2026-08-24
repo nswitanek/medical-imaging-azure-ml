@@ -1,0 +1,11 @@
+# Local venv + run artifacts (do not commit)
+.venv/
+.run/
+__pycache__/
+*.pyc
+*.pt
+
+# Downloaded Qwen text-tower snapshot (register as an AML model asset instead of committing)
+qwen3-0.6b/
+*.safetensors
+.hf-cache/

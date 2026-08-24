@@ -1,0 +1,69 @@
+# Inference orchestration flow for a study. Rendered by tools/render_diagrams.py.
+# Edit this file, then run:
+#   python tools/render_diagrams.py docs/diagrams/inference-flow.yaml
+title: Model Hosting & Inference Orchestration
+
+zones:
+  - {id: intake,  label: "Intake"}
+  - {id: vision,  label: "Vision inference"}
+  - {id: reason,  label: "Reasoning & guardrails"}
+  - {id: output,  label: "Output & review"}
+
+nodes:
+  - id: arrive
+    zone: intake
+    conceptual: "Study arrives"
+    azure: "Event Grid /\nqueue trigger"
+    icon: azure.integration.EventGridTopics
+  - id: route
+    zone: intake
+    conceptual: "Triage / route"
+    azure: "Orchestrator\n(Container Apps)"
+    icon: azure.compute.ContainerApps
+  - id: deidchk
+    zone: intake
+    conceptual: "De-ID check"
+    azure: "AI Services\n(de-ID)"
+    icon: azure.ml.CognitiveServices
+
+  - id: vmodel
+    zone: vision
+    conceptual: "Domain vision model\n(detect / segment)"
+    azure: "Managed endpoint /\nAKS"
+    icon: azure.compute.KubernetesServices
+
+  - id: vlm
+    zone: reason
+    conceptual: "VLM reasoning /\nreport drafting"
+    azure: "Microsoft Foundry\n(VLM)"
+    icon: azure.ml.AzureOpenAI
+  - id: eval
+    zone: reason
+    conceptual: "Evaluation /\nguardrails"
+    azure: "Evaluators +\nContent Safety"
+    icon: azure.ml.CognitiveServices
+
+  - id: fhirout
+    zone: output
+    conceptual: "Structured output\n(FHIR)"
+    azure: "AHDS\nFHIR service"
+    icon: azure.other.FhirService
+  - id: review
+    zone: output
+    conceptual: "Human review"
+    azure: "Clinician review"
+  - id: audit
+    zone: output
+    conceptual: "Persist + audit"
+    azure: "Azure Monitor /\nLog Analytics"
+    icon: azure.devops.ApplicationInsights
+
+edges:
+  - [arrive, route]
+  - [route, deidchk]
+  - [deidchk, vmodel]
+  - [vmodel, vlm]
+  - [vlm, eval]
+  - [eval, fhirout]
+  - [fhirout, review]
+  - [review, audit]

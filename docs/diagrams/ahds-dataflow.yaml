@@ -1,0 +1,57 @@
+# Azure Health Data Services data flow (DICOM + FHIR). Rendered by tools/render_diagrams.py.
+# Edit this file, then run:
+#   python tools/render_diagrams.py docs/diagrams/ahds-dataflow.yaml
+title: Health Data Services — DICOM + FHIR Data Flow
+
+zones:
+  - {id: source,  label: "Sources"}
+  - {id: ahds,    label: "Azure Health Data Services"}
+  - {id: process, label: "De-ID & feature pipeline"}
+  - {id: land,    label: "Lakehouse"}
+
+nodes:
+  - id: modality
+    zone: source
+    conceptual: "Modalities"
+    azure: "Modalities\n(DICOM)"
+  - id: ehr
+    zone: source
+    conceptual: "EHR / HL7v2"
+    azure: "EHR / HL7v2"
+
+  - id: dicom
+    zone: ahds
+    conceptual: "DICOM service"
+    azure: "AHDS\nDICOM service"
+    icon: azure.other.FhirService
+  - id: fhir
+    zone: ahds
+    conceptual: "FHIR service\n(ImagingStudy)"
+    azure: "AHDS\nFHIR service"
+    icon: azure.other.FhirService
+  - id: convert
+    zone: ahds
+    conceptual: "$convert-data"
+    azure: "AHDS\n$convert-data"
+    icon: azure.integration.AzureAPIForFhir
+
+  - id: pipeline
+    zone: process
+    conceptual: "De-ID / feature\npipeline"
+    azure: "Functions +\nAI Services (de-ID)"
+    icon: azure.compute.FunctionApps
+
+  - id: lake
+    zone: land
+    conceptual: "Lakehouse"
+    azure: "Fabric / Snowflake /\nDatabricks"
+    icon: saas.analytics.Snowflake
+
+edges:
+  - [modality, dicom]
+  - [dicom, pipeline, "change feed"]
+  - [dicom, fhir, "DICOMcast", dashed]
+  - [ehr, convert]
+  - [convert, fhir]
+  - [fhir, pipeline, "de-ID $export"]
+  - [pipeline, lake]

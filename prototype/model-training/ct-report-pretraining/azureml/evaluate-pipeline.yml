@@ -1,0 +1,60 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+
+display_name: ct-report-evaluate-and-gate
+description: >
+  Evaluation + model-registration pipeline (docs/13). Prepares a held-out synthetic eval
+  shard (distinct seed), evaluates a candidate CT–report model against a threshold that
+  stands in for the best current model, and -- on pass -- registers the blessed model as a
+  versioned Model asset (``ct-report-siglip``). Deployment to the managed online endpoint is
+  the CD step performed from notebooks/invoke_endpoint.ipynb (see scripts/deploy.md).
+
+settings:
+  default_compute: azureml:cpu-cluster
+
+inputs:
+  # The candidate to evaluate -- a registered custom_model asset produced from a training run,
+  # e.g. azureml:ct-report-siglip-candidate:1  (see scripts/deploy.md for how to create it).
+  candidate_model:
+    type: custom_model
+    path: azureml:ct-report-siglip-candidate@latest
+  config_preset: smoke
+  eval_seed: 999                 # distinct from training so the eval split is held-out
+  gate_metric: zero_shot_accuracy
+  # WARNING (prototype shortcut): permissive on purpose so a smoke-trained model passes and the
+  # register+deploy happy-path demonstrates. 0.20 is barely above the 0.25 random-chance floor for
+  # 4 classes -- it is NOT a quality bar. In production set this to the current champion model's
+  # score on the same held-out eval set (see README 'Standard MLOps' note + scripts/deploy.md).
+  gate_threshold: 0.20
+
+outputs:
+  # Named pipeline output -> AML registers the blessed model with the workspace identity on
+  # success (no extra compute-MSI RBAC needed). Omit version for auto-increment.
+  blessed_model:
+    type: custom_model
+    name: ct-report-siglip
+
+jobs:
+
+  prepare_eval:
+    type: command
+    component: ./components/prepare_data.yml
+    inputs:
+      config_preset: ${{parent.inputs.config_preset}}
+      seed: ${{parent.inputs.eval_seed}}
+    outputs:
+      dataset:
+        mode: rw_mount
+
+  evaluate:
+    type: command
+    component: ./components/evaluate.yml
+    inputs:
+      candidate_model: ${{parent.inputs.candidate_model}}
+      eval_data: ${{parent.jobs.prepare_eval.outputs.dataset}}
+      gate_metric: ${{parent.inputs.gate_metric}}
+      threshold: ${{parent.inputs.gate_threshold}}
+    outputs:
+      metrics:
+        mode: rw_mount
+      blessed_model: ${{parent.outputs.blessed_model}}

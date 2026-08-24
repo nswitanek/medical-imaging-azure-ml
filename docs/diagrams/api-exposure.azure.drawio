@@ -1,0 +1,21 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Azure" id="azure">
+    <mxGraphModel dx="900" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="540" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="z_clients" value="CLIENTS" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="20" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_gateway" value="GATEWAY" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="240" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_services" value="SERVICES" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="460" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_models" value="MODELS" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="680" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="apps" value="Clinician app / EHR /&#10;downstream" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="apim" value="Azure API&#10;Management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="260" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="inference" value="App Service /&#10;Container Apps" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"><mxGeometry x="480" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="model" value="Managed endpoints /&#10;Microsoft Foundry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="700" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="e0" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="apps" target="apim"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="apim" target="inference"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="inference" target="model"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

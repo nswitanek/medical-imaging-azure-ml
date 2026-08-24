@@ -1,0 +1,20 @@
+# Azure ML training environment for the CT–report pretraining scaffold.
+# Build:  az ml environment create -f environment/conda.yaml  (referenced by components)
+name: ct-report-pretraining-env
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      # GPU builds resolve on Azure ML curated CUDA base images; pin as needed.
+      - torch>=2.2
+      - numpy>=1.26
+      - mlflow
+      - azureml-mlflow
+      # Real text tower (Qwen3-0.6B + LoRA). Required for text_tower=qwen; the code falls back
+      # to a dependency-free tower without them. On governed compute that can't reach
+      # huggingface.co, mount Qwen as a model asset and set CTREPORT_QWEN_DIR + HF_HUB_OFFLINE=1
+      # (see scripts/qwen-text-tower.md).
+      - transformers>=4.51
+      - peft>=0.11

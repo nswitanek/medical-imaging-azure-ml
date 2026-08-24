@@ -1,0 +1,131 @@
+# End-to-end reference production architecture. Rendered by tools/render_diagrams.py into
+# reference-architecture.conceptual.graphviz.png (vendor-neutral) and
+# reference-architecture.azure.graphviz.png (official Azure icons), plus editable .drawio starters.
+# Edit this file, then run:
+#   python tools/render_diagrams.py docs/diagrams/reference-architecture.yaml
+title: Medical-Imaging AI — Reference Production Architecture
+
+zones:
+  - {id: source,   label: "Sources (hospital)"}
+  - {id: ingest,   label: "Ingestion"}
+  - {id: deid,     label: "PHI Detect & De-ID"}
+  - {id: data,     label: "Data Platform"}
+  - {id: ai,       label: "AI Platform & Hosting"}
+  - {id: api,      label: "API Exposure"}
+  - {id: xcut,     label: "Cross-cutting Foundations"}
+
+nodes:
+  - id: pacs
+    zone: source
+    conceptual: "PACS / modalities\n(DICOM, HL7v2)"
+    azure: "PACS / modalities\n(DICOM, HL7v2)"
+  - id: ehr
+    zone: source
+    conceptual: "EHR / reports /\nnotes (multimodal)"
+    azure: "EHR / reports /\nnotes (multimodal)"
+
+  - id: dicom
+    zone: ingest
+    conceptual: "DICOM ingest\n(STOW/WADO/QIDO)"
+    azure: "AHDS\nDICOM service"
+    icon: azure.other.FhirService
+  - id: fhir
+    zone: ingest
+    conceptual: "Clinical data\ningest (FHIR/HL7v2)"
+    azure: "AHDS\nFHIR service"
+    icon: azure.other.FhirService
+
+  - id: phi
+    zone: deid
+    conceptual: "PHI detection &\nde-identification"
+    azure: "AI Services\n(de-ID) + Functions"
+    icon: azure.ml.CognitiveServices
+  - id: reidkv
+    zone: deid
+    conceptual: "Re-identification\nkey (segregated)"
+    azure: "Azure Key Vault\n(re-ID mapping)"
+    icon: azure.security.KeyVaults
+
+  - id: lake
+    zone: data
+    conceptual: "Lakehouse\n(curated / features)"
+    azure: "Fabric / Snowflake /\nDatabricks"
+    icon: saas.analytics.Snowflake
+  - id: store
+    zone: data
+    conceptual: "De-ID pixel &\nfeature store"
+    azure: "Azure Data Lake\nStorage"
+    icon: azure.storage.DataLakeStorage
+
+  - id: foundry
+    zone: ai
+    conceptual: "Model catalog\n(VLMs, vision, custom)"
+    azure: "Microsoft Foundry"
+    icon: azure.ml.AzureOpenAI
+  - id: hosting
+    zone: ai
+    conceptual: "Model hosting &\norchestration"
+    azure: "Managed endpoints /\nAKS / Container Apps"
+    icon: azure.ml.MachineLearningServiceWorkspaces
+
+  - id: apim
+    zone: api
+    conceptual: "API gateway\n(authN/Z, throttle,\nversioning, audit)"
+    azure: "Azure API\nManagement"
+    icon: azure.integration.APIManagement
+  - id: apps
+    zone: api
+    conceptual: "Inference /\nbusiness-logic services"
+    azure: "App Service /\nContainer Apps"
+    icon: azure.compute.ContainerApps
+  - id: clients
+    zone: api
+    conceptual: "Clinician apps /\ndownstream systems"
+    azure: "Clinician apps /\ndownstream systems"
+
+  - id: entra
+    zone: xcut
+    conceptual: "Identity"
+    azure: "Microsoft Entra ID"
+    icon: azure.identity.ActiveDirectory
+  - id: pl
+    zone: xcut
+    conceptual: "Network isolation"
+    azure: "Private Link /\nVNet"
+    icon: azure.other.PrivateEndpoints
+  - id: purview
+    zone: xcut
+    conceptual: "Data governance"
+    azure: "Microsoft Purview"
+    icon: azure.integration.AzureDataCatalog
+  - id: defender
+    zone: xcut
+    conceptual: "Security posture"
+    azure: "Defender for Cloud"
+    icon: azure.security.MicrosoftDefenderForCloud
+  - id: monitor
+    zone: xcut
+    conceptual: "Monitoring & audit"
+    azure: "Azure Monitor /\nLog Analytics"
+    icon: azure.devops.ApplicationInsights
+  - id: safety
+    zone: xcut
+    conceptual: "Responsible AI\nguardrails"
+    azure: "AI Content Safety"
+    icon: azure.ml.CognitiveServices
+
+edges:
+  - [pacs, dicom]
+  - [ehr, fhir]
+  - [dicom, phi]
+  - [fhir, phi]
+  - [phi, lake]
+  - [phi, store]
+  - [phi, reidkv, "re-ID key", dashed]
+  - [lake, foundry]
+  - [store, foundry]
+  - [foundry, hosting]
+  - [lake, hosting]
+  - [hosting, apps]
+  - [apps, apim]
+  - [apim, clients]

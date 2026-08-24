@@ -1,0 +1,2 @@
+# Keep the uv lockfile LF-normalized so its content hashes match across platforms/CI.
+uv.lock text eol=lf

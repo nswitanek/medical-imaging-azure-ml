@@ -1,0 +1,39 @@
+# Roadmap phases to production and commercialization. Rendered by tools/render_diagrams.py.
+# Edit this file, then run:
+#   python tools/render_diagrams.py docs/diagrams/roadmap.yaml
+title: Roadmap — Prototype to Production to SaaS
+
+zones:
+  - {id: p0, label: "Phase 0"}
+  - {id: p1, label: "Phase 1"}
+  - {id: p2, label: "Phase 2"}
+  - {id: p3, label: "Phase 3"}
+  - {id: p4, label: "Phase 4"}
+
+nodes:
+  - id: readiness
+    zone: p0
+    conceptual: "Readiness\n(quota, access,\nlanding zone)"
+    azure: "Readiness\n(quota, access,\nlanding zone)"
+  - id: prototype
+    zone: p1
+    conceptual: "2-Day Prototype\n(thin slice,\nde-ID data)"
+    azure: "2-Day Prototype\n(thin slice,\nde-ID data)"
+  - id: mvp
+    zone: p2
+    conceptual: "Production MVP\n(single-tenant,\ngoverned, HITL)"
+    azure: "Production MVP\n(single-tenant,\ngoverned, HITL)"
+  - id: scale
+    zone: p3
+    conceptual: "Scale / Harden\n(multi-region,\nHA, cost opt)"
+    azure: "Scale / Harden\n(multi-region,\nHA, cost opt)"
+  - id: saas
+    zone: p4
+    conceptual: "Commercialize / SaaS\n(multi-tenant,\nmetering, onboarding)"
+    azure: "Commercialize / SaaS\n(multi-tenant,\nmetering, onboarding)"
+
+edges:
+  - [readiness, prototype]
+  - [prototype, mvp]
+  - [mvp, scale]
+  - [scale, saas]

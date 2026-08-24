@@ -1,0 +1,38 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+
+name: ct_report_prepare_data
+display_name: CT–Report — Prepare training snapshot
+version: 0.1.0
+description: >
+  Build a versioned, immutable CT+report training snapshot. Scaffold generates a
+  synthetic (de-identified) shard; replace with a lakehouse/feature-view read for real
+  training (docs/04-data-platform-design.md).
+
+inputs:
+  config_preset:
+    type: string
+    default: smoke
+    enum: [smoke, default]
+  num_samples:
+    type: integer
+    optional: true
+  seed:
+    type: integer
+    optional: true
+
+outputs:
+  dataset:
+    type: uri_folder
+
+code: ../../src
+environment:
+  conda_file: ../../environment/conda.yaml
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+
+command: >-
+  python prepare_data.py
+  --output-dir ${{outputs.dataset}}
+  --config-preset ${{inputs.config_preset}}
+  $[[--num-samples ${{inputs.num_samples}}]]
+  $[[--seed ${{inputs.seed}}]]

@@ -1,0 +1,39 @@
+# API exposure gateway pattern. Rendered by tools/render_diagrams.py.
+# Edit this file, then run:
+#   python tools/render_diagrams.py docs/diagrams/api-exposure.yaml
+title: API Exposure — Gateway Pattern
+
+zones:
+  - {id: clients, label: "Clients"}
+  - {id: gateway, label: "Gateway"}
+  - {id: services, label: "Services"}
+  - {id: models,  label: "Models"}
+
+nodes:
+  - id: apps
+    zone: clients
+    conceptual: "Clinician app / EHR /\ndownstream"
+    azure: "Clinician app / EHR /\ndownstream"
+
+  - id: apim
+    zone: gateway
+    conceptual: "API gateway\n(authN/Z, throttle,\nversioning, audit,\nrequest/response policy)"
+    azure: "Azure API\nManagement"
+    icon: azure.integration.APIManagement
+
+  - id: inference
+    zone: services
+    conceptual: "Inference services\n(orchestration,\nbusiness logic)"
+    azure: "App Service /\nContainer Apps"
+    icon: azure.compute.ContainerApps
+
+  - id: model
+    zone: models
+    conceptual: "Models"
+    azure: "Managed endpoints /\nMicrosoft Foundry"
+    icon: azure.ml.MachineLearningServiceWorkspaces
+
+edges:
+  - [apps, apim]
+  - [apim, inference]
+  - [inference, model]

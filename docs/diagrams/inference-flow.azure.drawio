@@ -1,0 +1,31 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Azure" id="azure">
+    <mxGraphModel dx="900" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="540" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="z_intake" value="INTAKE" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="20" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_vision" value="VISION INFERENCE" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="240" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_reason" value="REASONING &amp; GUARDRAILS" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="460" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_output" value="OUTPUT &amp; REVIEW" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="680" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="arrive" value="Event Grid /&#10;queue trigger" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="route" value="Orchestrator&#10;(Container Apps)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="170" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="deidchk" value="AI Services&#10;(de-ID)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="270" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="vmodel" value="Managed endpoint /&#10;AKS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="260" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="vlm" value="Microsoft Foundry&#10;(VLM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"><mxGeometry x="480" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="eval" value="Evaluators +&#10;Content Safety" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"><mxGeometry x="480" y="170" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="fhirout" value="AHDS&#10;FHIR service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="700" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="review" value="Clinician review" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="700" y="170" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="audit" value="Azure Monitor /&#10;Log Analytics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="700" y="270" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="e0" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="arrive" target="route"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="route" target="deidchk"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="deidchk" target="vmodel"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="vmodel" target="vlm"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="vlm" target="eval"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="eval" target="fhirout"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="fhirout" target="review"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e7" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="review" target="audit"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

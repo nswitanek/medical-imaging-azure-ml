@@ -1,0 +1,51 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Conceptual" id="conceptual">
+    <mxGraphModel dx="900" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="540" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="z_ingress" value="INGRESS" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="20" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_gateway" value="GATEWAY (AUTH / TENANT / THROTTLE)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="240" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_orchestrate" value="NORMALIZE &amp; ROUTE (WORKLOAD CONTRACT)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="460" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_async" value="ASYNC (BATCH)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="680" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_backend" value="SHARED CAPACITY POOLS (BY WORKLOAD CLASS)" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="900" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="z_out" value="RESULTS" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontStyle=2;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1120" y="40" width="200" height="460" as="geometry" /></mxCell>
+        <mxCell id="p_img" value="Image-only&#10;(DICOM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="p_txt" value="Image + text&#10;(reports, notes)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="170" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="p_tab" value="Image + text&#10;+ tabular" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="270" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="evt" value="DICOM created&#10;event (event-driven)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="40" y="370" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="gw" value="API gateway&#10;(auth, tenant, throttle)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1"><mxGeometry x="260" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="orch" value="Workload router / orchestrator&#10;(normalize → select → route)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"><mxGeometry x="480" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="reg" value="Model capability&#10;registry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1"><mxGeometry x="480" y="170" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="sb" value="Async queue&#10;(normalized job)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="700" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="bworker" value="Batch worker&#10;(pulls job)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1"><mxGeometry x="700" y="170" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="vlm" value="Managed VLM APIs&#10;(quota / rate-limited)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="920" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="rtgpu" value="RT GPU pool&#10;(warm min + autoscale)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="920" y="170" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="rtcpu" value="RT CPU pool&#10;(warm min + autoscale)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="920" y="270" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="batgpu" value="Batch GPU pool&#10;(elastic, queue-driven)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="920" y="370" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="batcpu" value="Batch CPU pool&#10;(elastic, queue-driven)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1"><mxGeometry x="920" y="470" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="res" value="Result / callback&#10;store → review / FHIR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1"><mxGeometry x="1140" y="70" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="e0" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="p_img" target="gw"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="p_txt" target="gw"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="p_tab" target="gw"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="gw" target="orch"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" value="event-driven" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#b85450;fontSize=9;" edge="1" parent="1" source="evt" target="orch"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e5" value="capability lookup" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#b85450;fontSize=9;" edge="1" parent="1" source="orch" target="reg"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e6" value="real-time (sync)" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="orch" target="vlm"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e7" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="orch" target="rtgpu"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e8" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="orch" target="rtcpu"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e9" value="batch (async): enqueue" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="orch" target="sb"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e10" value="worker pulls job" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="sb" target="bworker"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e11" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="bworker" target="batgpu"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e12" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="bworker" target="batcpu"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e13" value="same model image" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#b85450;fontSize=9;" edge="1" parent="1" source="rtgpu" target="batgpu"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e14" value="same model image" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#b85450;fontSize=9;" edge="1" parent="1" source="rtcpu" target="batcpu"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e15" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="vlm" target="res"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e16" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="rtgpu" target="res"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e17" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="rtcpu" target="res"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e18" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="batgpu" target="res"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e19" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" parent="1" source="batcpu" target="res"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

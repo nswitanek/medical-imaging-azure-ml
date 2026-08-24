@@ -1,0 +1,51 @@
+# Evaluation gate for changes. Rendered by tools/render_diagrams.py.
+# Edit this file, then run:
+#   python tools/render_diagrams.py docs/diagrams/evaluation-gate.yaml
+title: Evaluation Practices — Change Gate
+
+zones:
+  - {id: change,  label: "Change"}
+  - {id: autoeval, label: "Automated eval"}
+  - {id: human,   label: "Human & rollout"}
+  - {id: fail,    label: "Fail path"}
+
+nodes:
+  - id: change
+    zone: change
+    conceptual: "Change\n(model / prompt /\npipeline)"
+    azure: "PR / CI trigger\n(GitHub Actions)"
+    icon: azure.devops.Pipelines
+
+  - id: suite
+    zone: autoeval
+    conceptual: "Automated\neval suite"
+    azure: "Evaluators\n(Microsoft Foundry)"
+    icon: azure.ml.CognitiveServices
+
+  - id: spot
+    zone: human
+    conceptual: "Human\nspot-review"
+    azure: "Reviewer approval"
+  - id: canary
+    zone: human
+    conceptual: "Canary"
+    azure: "Managed endpoint\n(canary)"
+    icon: azure.compute.ContainerApps
+  - id: rollout
+    zone: human
+    conceptual: "Full rollout +\nmonitor"
+    azure: "Azure Monitor"
+    icon: azure.devops.ApplicationInsights
+
+  - id: block
+    zone: fail
+    conceptual: "Block + alert"
+    azure: "Alert\n(Azure Monitor)"
+    icon: azure.devops.ApplicationInsights
+
+edges:
+  - [change, suite]
+  - [suite, spot, "pass thresholds"]
+  - [suite, block, "fail", dashed]
+  - [spot, canary]
+  - [canary, rollout]

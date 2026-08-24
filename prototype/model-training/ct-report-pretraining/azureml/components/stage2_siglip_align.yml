@@ -1,0 +1,44 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+
+name: ct_report_stage2_siglip
+display_name: CT–Report — Stage 2 SigLIP align (L_SigLIP)
+version: 0.1.0
+description: >
+  Cross-modal SigLIP alignment of the vision tower (ViT_l -> ViT_g) with the text tower
+  (Qwen3-0.6B + LoRA). Warm-starts ViT_l from Stage 1. Emits the aligned model + model
+  card for the registry and the evaluation gate (docs/13).
+
+inputs:
+  dataset:
+    type: uri_folder
+  vit_local:
+    type: uri_folder
+  config_preset:
+    type: string
+    default: smoke
+    enum: [smoke, default]
+  max_steps:
+    type: integer
+    optional: true
+  freeze_local:
+    type: boolean
+    default: false
+
+outputs:
+  model:
+    type: uri_folder
+
+code: ../../src
+environment:
+  conda_file: ../../environment/conda.yaml
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+
+command: >-
+  python stage2_siglip_align.py
+  --data-dir ${{inputs.dataset}}
+  --stage1-ckpt ${{inputs.vit_local}}
+  --output-dir ${{outputs.model}}
+  --config-preset ${{inputs.config_preset}}
+  $[[--max-steps ${{inputs.max_steps}}]]
+  --freeze-local ${{inputs.freeze_local}}

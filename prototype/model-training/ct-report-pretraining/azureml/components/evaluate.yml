@@ -1,0 +1,44 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+
+name: ct_report_evaluate
+display_name: CT–Report — Evaluate + gate (docs/13)
+version: 0.1.0
+description: >
+  Evaluate a trained CT–report model on a held-out shard and gate it against a threshold that
+  stands in for the best current model. On pass, emits the model to ``blessed_model`` (the
+  pipeline registers it as a versioned Model asset); on fail, exits non-zero so nothing
+  downstream registers or deploys.
+
+inputs:
+  candidate_model:
+    type: custom_model
+  eval_data:
+    type: uri_folder
+  gate_metric:
+    type: string
+    default: zero_shot_accuracy
+    enum: [zero_shot_accuracy, image_text_recall_at_1, mean_pos_cosine]
+  threshold:
+    type: number
+    default: 0.30
+
+outputs:
+  metrics:
+    type: uri_folder
+  blessed_model:
+    type: custom_model
+
+code: ../../src
+environment:
+  conda_file: ../../environment/conda.yaml
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+
+command: >-
+  python evaluate.py
+  --model-dir ${{inputs.candidate_model}}
+  --data-dir ${{inputs.eval_data}}
+  --output-dir ${{outputs.metrics}}
+  --blessed-dir ${{outputs.blessed_model}}
+  --gate-metric ${{inputs.gate_metric}}
+  --threshold ${{inputs.threshold}}

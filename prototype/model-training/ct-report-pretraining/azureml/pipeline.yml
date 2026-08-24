@@ -1,0 +1,52 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+
+display_name: ct-report-multimodal-pretraining
+description: >
+  Two-stage volumetric CT–report pretraining (CVPR 2026, Fig. 2) as an Azure ML pipeline:
+  prepare_data -> Stage 1 SSL (ViT_l, L_SSL) -> Stage 2 SigLIP alignment (L_SigLIP).
+  Prototype scaffold on synthetic de-identified data -- not clinically validated.
+
+settings:
+  default_compute: azureml:cpu-cluster   # override to azureml:gpu-cluster for real runs
+
+inputs:
+  config_preset: smoke                   # set to "default" for paper-scale dims on GPU
+
+jobs:
+
+  prepare_data:
+    type: command
+    component: ./components/prepare_data.yml
+    inputs:
+      config_preset: ${{parent.inputs.config_preset}}
+    outputs:
+      dataset:
+        mode: rw_mount
+
+  stage1_ssl:
+    type: command
+    component: ./components/stage1_ssl_pretrain.yml
+    # compute: azureml:gpu-cluster       # uncomment to pin GPU per-stage
+    inputs:
+      dataset: ${{parent.jobs.prepare_data.outputs.dataset}}
+      config_preset: ${{parent.inputs.config_preset}}
+    outputs:
+      vit_local:
+        mode: rw_mount
+
+  stage2_siglip:
+    type: command
+    component: ./components/stage2_siglip_align.yml
+    # compute: azureml:gpu-cluster
+    inputs:
+      dataset: ${{parent.jobs.prepare_data.outputs.dataset}}
+      vit_local: ${{parent.jobs.stage1_ssl.outputs.vit_local}}
+      config_preset: ${{parent.inputs.config_preset}}
+      freeze_local: false
+    outputs:
+      model:
+        mode: rw_mount
+        # register the aligned model for lineage + the eval gate (docs/13):
+        # name: ct-report-siglip
+        # type: custom_model

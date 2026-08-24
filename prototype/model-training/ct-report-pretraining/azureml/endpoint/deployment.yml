@@ -1,0 +1,27 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
+# PROTOTYPE CD SHORTCUT: deploying this from a notebook/CLI with personal Owner creds and pinning
+# a hard-coded model version + single-shot traffic is NOT production MLOps. A real system promotes
+# via a registry alias (@champion) and rolls out blue/green or canary with automated rollback under
+# a least-privilege service principal. See scripts/deploy.md 'Standard MLOps' + README.
+name: blue
+endpoint_name: ct-report-endpoint
+
+# The blessed model registered by the evaluate pipeline (bump the version as it increments).
+model: azureml:ct-report-siglip@latest
+
+# Ship the source alongside the weights so ``from ctreport...`` resolves at scoring time --
+# the custom_model asset holds only weights + config, not the package code.
+code_configuration:
+  code: ../../src
+  scoring_script: score.py
+
+environment:
+  conda_file: ../../environment/inference.yaml
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04:latest
+
+instance_type: Standard_DS3_v2
+instance_count: 1
+
+request_settings:
+  request_timeout_ms: 60000
+  max_concurrent_requests_per_instance: 1

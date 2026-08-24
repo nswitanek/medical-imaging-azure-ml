@@ -1,0 +1,65 @@
+# Imaging + multimodal ingestion flow. Rendered by tools/render_diagrams.py.
+# Edit this file, then run:
+#   python tools/render_diagrams.py docs/diagrams/ingestion.yaml
+title: Data Ingestion — PACS/DICOM + Multimodal
+
+zones:
+  - {id: source,  label: "Hospital sources"}
+  - {id: gateway, label: "Ingest gateway"}
+  - {id: service, label: "Health Data Services"}
+  - {id: process, label: "Process & de-ID"}
+  - {id: land,    label: "Landing"}
+
+nodes:
+  - id: modality
+    zone: source
+    conceptual: "Modality / PACS\n(DICOM, HL7v2)"
+    azure: "Modality / PACS\n(DICOM, HL7v2)"
+
+  - id: gw
+    zone: gateway
+    conceptual: "DICOM gateway\n(STOW)"
+    azure: "Container Apps /\nDICOM gateway"
+    icon: azure.compute.ContainerApps
+
+  - id: dicom
+    zone: service
+    conceptual: "DICOM store"
+    azure: "AHDS\nDICOM service"
+    icon: azure.other.FhirService
+  - id: feed
+    zone: service
+    conceptual: "Change feed"
+    azure: "DICOM change feed /\nEvent Grid"
+    icon: azure.integration.EventGridTopics
+
+  - id: job
+    zone: process
+    conceptual: "Ingest job\n(orchestration)"
+    azure: "Azure Functions /\nContainer job"
+    icon: azure.compute.FunctionApps
+  - id: phi
+    zone: process
+    conceptual: "PHI / de-ID stage"
+    azure: "AI Services\n(de-ID)"
+    icon: azure.ml.CognitiveServices
+
+  - id: meta
+    zone: land
+    conceptual: "Lakehouse\n(metadata)"
+    azure: "Fabric / Snowflake /\nDatabricks"
+    icon: saas.analytics.Snowflake
+  - id: pixels
+    zone: land
+    conceptual: "De-ID pixel store"
+    azure: "Azure Data Lake\nStorage"
+    icon: azure.storage.DataLakeStorage
+
+edges:
+  - [modality, gw]
+  - [gw, dicom, "STOW"]
+  - [dicom, feed]
+  - [feed, job]
+  - [job, phi]
+  - [phi, meta]
+  - [phi, pixels]

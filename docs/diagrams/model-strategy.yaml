@@ -1,0 +1,44 @@
+# Model strategy: composing specialized models + VLM. Rendered by tools/render_diagrams.py.
+# Edit this file, then run:
+#   python tools/render_diagrams.py docs/diagrams/model-strategy.yaml
+title: Microsoft Foundry Model Strategy — Model Composition
+
+zones:
+  - {id: specialized, label: "Specialized inputs"}
+  - {id: reasoning,   label: "Reasoning"}
+  - {id: gate,        label: "Gate"}
+
+nodes:
+  - id: domain
+    zone: specialized
+    conceptual: "Domain vision model\n(embeddings / candidates)"
+    azure: "Medical vision model\n(managed endpoint)"
+    icon: azure.ml.MachineLearningServiceWorkspaces
+  - id: custom
+    zone: specialized
+    conceptual: "Custom model\n(task detect / measure)"
+    azure: "Custom model\n(AML endpoint)"
+    icon: azure.compute.KubernetesServices
+  - id: retrieval
+    zone: specialized
+    conceptual: "Retrieval over prior\nde-ID studies"
+    azure: "Azure AI Search"
+    icon: azure.web.CognitiveSearch
+
+  - id: vlm
+    zone: reasoning
+    conceptual: "VLM: reason, draft,\nstructure"
+    azure: "Microsoft Foundry\n(VLM)"
+    icon: azure.ml.AzureOpenAI
+
+  - id: eval
+    zone: gate
+    conceptual: "Eval / guardrails"
+    azure: "Evaluators +\nContent Safety"
+    icon: azure.ml.CognitiveServices
+
+edges:
+  - [domain, vlm]
+  - [custom, vlm]
+  - [retrieval, vlm]
+  - [vlm, eval]

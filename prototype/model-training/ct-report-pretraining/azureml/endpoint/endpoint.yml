@@ -1,0 +1,7 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineEndpoint.schema.json
+name: ct-report-endpoint
+description: >
+  Managed online endpoint hosting the blessed CT–report multimodal model. Token-based auth
+  (no static keys) to honor the governed workspace policy. Deploy via
+  azureml/endpoint/deployment.yml (see scripts/deploy.md).
+auth_mode: aml_token

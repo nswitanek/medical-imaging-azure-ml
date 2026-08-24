@@ -1,0 +1,117 @@
+# Payload routing: APIM authenticates & forwards; the Container Apps orchestrator
+# NORMALIZES the workload descriptor and THEN decides sync vs async (batch).
+# Capacity pools organized BY WORKLOAD CLASS (not by customer).
+# Render: python tools/render_diagrams.py docs/diagrams/payload-routing.yaml
+title: Payload Processing & Backend Alignment
+
+zones:
+  - {id: ingress,     label: "Ingress"}
+  - {id: gateway,     label: "Gateway (auth / tenant / throttle)"}
+  - {id: orchestrate, label: "Normalize & route (workload contract)"}
+  - {id: async,       label: "Async (batch)"}
+  - {id: backend,     label: "Shared capacity pools (by workload class)"}
+  - {id: out,         label: "Results"}
+
+nodes:
+  - id: p_img
+    zone: ingress
+    conceptual: "Image-only\n(DICOM)"
+    azure: "DICOM /\nData Lake"
+    icon: azure.storage.DataLakeStorage
+  - id: p_txt
+    zone: ingress
+    conceptual: "Image + text\n(reports, notes)"
+    azure: "+ lakehouse\ntext"
+    icon: azure.storage.DataLakeStorage
+  - id: p_tab
+    zone: ingress
+    conceptual: "Image + text\n+ tabular"
+    azure: "+ lakehouse\nfeatures"
+    icon: saas.analytics.Snowflake
+  - id: evt
+    zone: ingress
+    conceptual: "DICOM created\nevent (event-driven)"
+    azure: "Event Grid\n(AHDS DICOM)"
+    icon: azure.integration.EventGridTopics
+
+  - id: gw
+    zone: gateway
+    conceptual: "API gateway\n(auth, tenant, throttle)"
+    azure: "Azure API\nManagement"
+    icon: azure.integration.APIManagement
+
+  - id: orch
+    zone: orchestrate
+    conceptual: "Workload router / orchestrator\n(normalize → select → route)"
+    azure: "Container Apps /\nagent runtime"
+    icon: azure.compute.ContainerApps
+  - id: reg
+    zone: orchestrate
+    conceptual: "Model capability\nregistry"
+    azure: "Azure ML / Foundry\nregistry"
+    icon: azure.general.Versions
+
+  - id: sb
+    zone: async
+    conceptual: "Async queue\n(normalized job)"
+    azure: "Service Bus"
+    icon: azure.integration.ServiceBus
+  - id: bworker
+    zone: async
+    conceptual: "Batch worker\n(pulls job)"
+    azure: "Container Apps\n(batch worker)"
+    icon: azure.compute.ContainerApps
+
+  - id: vlm
+    zone: backend
+    conceptual: "Managed VLM APIs\n(quota / rate-limited)"
+    azure: "Foundry Models\n(OpenAI, Anthropic)"
+    icon: azure.ml.AzureOpenAI
+  - id: rtgpu
+    zone: backend
+    conceptual: "RT GPU pool\n(warm min + autoscale)"
+    azure: "AML online\nendpoints (GPU)"
+    icon: azure.ml.MachineLearningServiceWorkspaces
+  - id: rtcpu
+    zone: backend
+    conceptual: "RT CPU pool\n(warm min + autoscale)"
+    azure: "AML online\nendpoints (CPU)"
+    icon: azure.ml.MachineLearningServiceWorkspaces
+  - id: batgpu
+    zone: backend
+    conceptual: "Batch GPU pool\n(elastic, queue-driven)"
+    azure: "AML batch\nendpoints (GPU)"
+    icon: azure.compute.BatchAccounts
+  - id: batcpu
+    zone: backend
+    conceptual: "Batch CPU pool\n(elastic, queue-driven)"
+    azure: "AML batch\nendpoints (CPU)"
+    icon: azure.compute.BatchAccounts
+
+  - id: res
+    zone: out
+    conceptual: "Result / callback\nstore → review / FHIR"
+    azure: "Result store /\njob callback"
+    icon: azure.storage.StorageAccounts
+
+edges:
+  - [p_img, gw]
+  - [p_txt, gw]
+  - [p_tab, gw]
+  - [gw, orch]
+  - [evt, orch, "event-driven", dashed]
+  - [orch, reg, "capability lookup", dashed]
+  - [orch, vlm, "real-time (sync)"]
+  - [orch, rtgpu]
+  - [orch, rtcpu]
+  - [orch, sb, "batch (async): enqueue"]
+  - [sb, bworker, "worker pulls job"]
+  - [bworker, batgpu]
+  - [bworker, batcpu]
+  - [rtgpu, batgpu, "same model image", dashed]
+  - [rtcpu, batcpu, "same model image", dashed]
+  - [vlm, res]
+  - [rtgpu, res]
+  - [rtcpu, res]
+  - [batgpu, res]
+  - [batcpu, res]

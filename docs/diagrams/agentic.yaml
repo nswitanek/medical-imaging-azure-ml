@@ -1,0 +1,74 @@
+# Agentic orchestration: orchestrator + tools. Rendered by tools/render_diagrams.py.
+# Edit this file, then run:
+#   python tools/render_diagrams.py docs/diagrams/agentic.yaml
+title: Agentic Orchestration — Orchestrator + Tools
+
+zones:
+  - {id: orchestrator, label: "Orchestrator"}
+  - {id: tools,        label: "Tools (models & services)"}
+  - {id: reason,       label: "Reason & gate"}
+  - {id: output,       label: "Output"}
+
+nodes:
+  - id: orch
+    zone: orchestrator
+    conceptual: "Orchestrator agent"
+    azure: "Microsoft Foundry\nAgent Service"
+    icon: azure.ml.AzureOpenAI
+
+  - id: triage
+    zone: tools
+    conceptual: "Triage / route\n(modality, body part)"
+    azure: "Tool: routing\n(Container Apps)"
+    icon: azure.compute.ContainerApps
+  - id: deid
+    zone: tools
+    conceptual: "De-ID verification"
+    azure: "Tool: AI Services\n(de-ID)"
+    icon: azure.ml.CognitiveServices
+  - id: vision
+    zone: tools
+    conceptual: "Domain vision model\n(detect/segment/measure)"
+    azure: "Tool: managed\nendpoint / AKS"
+    icon: azure.compute.KubernetesServices
+  - id: retrieval
+    zone: tools
+    conceptual: "Retrieval over\nde-ID priors"
+    azure: "Tool: Azure AI Search"
+    icon: azure.web.CognitiveSearch
+  - id: custom
+    zone: tools
+    conceptual: "Custom model\n(hip / knee task)"
+    azure: "Tool: custom\nendpoint"
+    icon: azure.ml.MachineLearningServiceWorkspaces
+
+  - id: draft
+    zone: reason
+    conceptual: "Reason + draft\nstructured findings"
+    azure: "VLM (Microsoft Foundry)"
+    icon: azure.ml.AzureOpenAI
+  - id: gate
+    zone: reason
+    conceptual: "Content-safety +\nevaluator gate"
+    azure: "Content Safety +\nEvaluators"
+    icon: azure.ml.CognitiveServices
+
+  - id: emit
+    zone: output
+    conceptual: "Emit FHIR output\n-> human review"
+    azure: "AHDS FHIR service\n-> clinician review"
+    icon: azure.other.FhirService
+
+edges:
+  - [orch, triage]
+  - [orch, deid]
+  - [orch, vision]
+  - [orch, retrieval]
+  - [orch, custom]
+  - [triage, draft]
+  - [deid, draft]
+  - [vision, draft]
+  - [retrieval, draft]
+  - [custom, draft]
+  - [draft, gate]
+  - [gate, emit]

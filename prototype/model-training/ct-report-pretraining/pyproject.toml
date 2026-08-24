@@ -1,0 +1,57 @@
+[project]
+name = "ct-report-pretraining"
+version = "0.1.0"
+description = "Runnable Azure ML v2 scaffold for two-stage volumetric CT–report multimodal pretraining (CVPR 2026, Fig. 2) on synthetic, de-identified data."
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = { text = "MIT" }
+
+# Core runtime shared by training, evaluation, and serving. Kept minimal so the local env
+# aligns with the AML component/inference environments (environment/conda.yaml, inference.yaml).
+dependencies = [
+    "numpy>=1.26",
+    "torch>=2.2",
+]
+
+[project.optional-dependencies]
+# Everything the invoke_endpoint.ipynb kernel needs: Jupyter tooling + the Azure ML SDK v2.
+notebook = [
+    "ipykernel>=6.29",
+    "jupyterlab>=4.2",
+    "azure-ai-ml>=1.20",
+    "azure-identity>=1.17",
+]
+# Everything the inspect_dicom.ipynb kernel needs: DICOM I/O + plotting + credential-less blob.
+dicom = [
+    "ipykernel>=6.29",
+    "jupyterlab>=4.2",
+    "pydicom>=2.4",
+    "matplotlib>=3.8",
+    "azure-storage-blob>=12.19",
+    "azure-identity>=1.17",
+]
+# Optional real text tower (Qwen3-0.6B + LoRA). The code falls back without these, but if a
+# run used them they must match at eval/serve time (see scripts/deploy.md).
+text = [
+    "transformers>=4.51",
+    "peft>=0.11",
+]
+# Extras used by the training/eval component entrypoints when running locally.
+train = [
+    "mlflow>=2.14",
+    "azureml-mlflow>=1.57",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# src-layout: only the importable package ships in the wheel; the top-level component
+# entrypoints (prepare_data.py, evaluate.py, score.py, stage*_*.py) stay as scripts.
+[tool.hatch.build.targets.wheel]
+packages = ["src/ctreport"]
+
+[tool.uv]
+# Keep the project package itself out of the resolver's "install as editable" default only if
+# desired; here we DO want ctreport importable in the venv (and thus the kernel).
+package = true

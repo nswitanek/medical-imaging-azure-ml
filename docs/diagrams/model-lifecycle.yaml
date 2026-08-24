@@ -1,0 +1,57 @@
+# Model governance lifecycle. Rendered by tools/render_diagrams.py.
+# Edit this file, then run:
+#   python tools/render_diagrams.py docs/diagrams/model-lifecycle.yaml
+title: Model Governance Lifecycle
+
+zones:
+  - {id: register, label: "Register"}
+  - {id: gate,     label: "Evaluate & approve"}
+  - {id: deploy,   label: "Deploy"}
+  - {id: operate,  label: "Operate"}
+  - {id: retire,   label: "Retire"}
+
+nodes:
+  - id: register
+    zone: register
+    conceptual: "Register"
+    azure: "Microsoft Foundry /\nModel registry"
+    icon: azure.ml.MachineLearningServiceWorkspaces
+  - id: evaluate
+    zone: gate
+    conceptual: "Evaluate (gated)"
+    azure: "Evaluators\n(quality gate)"
+    icon: azure.ml.CognitiveServices
+  - id: approve
+    zone: gate
+    conceptual: "Approve"
+    azure: "CI/CD approval\n(GitHub Actions)"
+    icon: azure.devops.Pipelines
+  - id: deploy
+    zone: deploy
+    conceptual: "Deploy (canary)"
+    azure: "Managed endpoint\n(canary)"
+    icon: azure.compute.ContainerApps
+  - id: monitor
+    zone: operate
+    conceptual: "Monitor"
+    azure: "Azure Monitor /\nModel monitoring"
+    icon: azure.devops.ApplicationInsights
+  - id: reeval
+    zone: operate
+    conceptual: "Re-evaluate"
+    azure: "Scheduled evals"
+    icon: azure.ml.CognitiveServices
+  - id: retire
+    zone: retire
+    conceptual: "Retire"
+    azure: "Deprecate /\ndecommission"
+    icon: azure.general.Versions
+
+edges:
+  - [register, evaluate]
+  - [evaluate, approve]
+  - [approve, deploy]
+  - [deploy, monitor]
+  - [monitor, reeval]
+  - [reeval, retire]
+  - [reeval, evaluate, "re-gate on change", dashed]

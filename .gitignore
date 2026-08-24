@@ -1,0 +1,24 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Secrets — never commit
+*.env
+.env*
+*.pem
+*.key
+secrets/
+*.pfx
+
+# Data — never commit PHI or datasets
+data/
+# ...but source packages named "data" (e.g. src/.../ctreport/data) are code, not datasets
+!**/src/**/data/
+!**/src/**/data/**
+*.dcm
+*.dicom
+*.csv
+*.parquet

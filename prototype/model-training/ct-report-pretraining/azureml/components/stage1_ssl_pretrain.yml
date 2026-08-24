@@ -1,0 +1,36 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+
+name: ct_report_stage1_ssl
+display_name: CT–Report — Stage 1 SSL pretrain (ViT_l, L_SSL)
+version: 0.1.0
+description: >
+  DINOv3-style self-supervised pretraining of the window-level vision transformer ViT_l
+  on CT windows. Emits ViT_l weights for Stage 2. Run on GPU compute (DEC-06b).
+
+inputs:
+  dataset:
+    type: uri_folder
+  config_preset:
+    type: string
+    default: smoke
+    enum: [smoke, default]
+  max_steps:
+    type: integer
+    optional: true
+
+outputs:
+  vit_local:
+    type: uri_folder
+
+code: ../../src
+environment:
+  conda_file: ../../environment/conda.yaml
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+
+command: >-
+  python stage1_ssl_pretrain.py
+  --data-dir ${{inputs.dataset}}
+  --output-dir ${{outputs.vit_local}}
+  --config-preset ${{inputs.config_preset}}
+  $[[--max-steps ${{inputs.max_steps}}]]
